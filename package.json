@@ -7,9 +7,8 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "rimraf dist && vite build && node scripts/build.js && node scripts/update-readme.js",
-    "preview": "vite preview",
-    "update-readme": "node scripts/update-readme.js"
+    "build": "rimraf dist && vite build && node scripts/build.js",
+    "preview": "vite preview"
   },
   "dependencies": {
     "vue": "^3.3.0",

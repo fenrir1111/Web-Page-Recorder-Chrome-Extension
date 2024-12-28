@@ -1,102 +1,67 @@
 # Web Page Recorder Chrome Extension
 
-一个简单的 Chrome 扩展，用于录制网页内容的视频。
+A Chrome extension for recording web page content with audio support.
 
-## 功能特点
+## Features
 
-- 使用快捷键 Alt+Shift+X 快速开始录制
-- 支持录制当前标签页的视频和音频
-- 界面简洁，提供录制状态指示
-- 可随时停止录制并自动保存
-- 支持选择保存位置
-- 文件自动使用时间戳命名
-- 高质量视频输出 (2.5 Mbps)
-- 高质量音频输出 (128 kbps)
-- 支持大文件下载
-- 实时录制状态显示
+- Record web page content with system audio
+- Keyboard shortcut support (Alt+Shift+X)
+- Visual recording indicator
+- Audio recording toggle
+- High-quality video output (2.5 Mbps)
+- High-quality audio output (128 kbps)
+- Save recordings as WebM files
+- Support for large file downloads
+- Real-time recording status display
 
-## 最新更新
+## Recent Updates
 
-### 音频录制支持
-- 添加系统音频捕获功能
-- 实现音频质量控制 (128 kbps)
-- 添加音频录制开关
-- 改进媒体流处理
+### Audio Recording Support
+- Added system audio capture capability
+- Implemented audio quality control (128 kbps)
+- Added audio recording toggle in popup
+- Improved media stream handling
 
-### 性能优化
-- 优化数据分块 (100ms 间隔)
-- 改进大文件处理
-- 增强错误处理和用户反馈
-- 添加详细日志记录
+### Performance Improvements
+- Optimized data chunking (100ms intervals)
+- Improved large file handling
+- Enhanced error handling and user feedback
+- Added detailed logging for troubleshooting
 
-### 界面增强
-- 添加录制状态指示器
-- 改进弹出界面，增加音频开关
-- 增强错误消息和通知
-- 添加录制进度反馈
+### UI Enhancements
+- Added recording status indicator
+- Improved popup interface with audio toggle
+- Enhanced error messages and notifications
+- Added recording progress feedback
 
-## 安装方法
+## Installation
 
-1. 下载源代码
-2. 打开 Chrome 浏览器，进入扩展程序页面 (chrome://extensions/)
-3. 开启右上角的"开发者模式"
-4. 点击"加载已解压的扩展程序"
-5. 选择源代码所在文件夹
+1. Clone the repository
+2. Run `npm install`
+3. Run `npm run build`
+4. Load the `dist` folder as an unpacked extension in Chrome
 
-## 使用方法
+## Usage
 
-1. 在想要录制的网页上按下 Alt+Shift+X，或点击扩展图标
-2. 选择是否包含音频
-3. 在弹出的选择框中选择要录制的内容
-4. 点击"分享"开始录制
-5. 录制状态会显示在页面底部中间
-6. 点击"停止录制"按钮或"停止共享"来结束录制
-7. 选择保存位置，录制文件将以 webm 格式保存
+1. Click the extension icon or use Alt+Shift+X
+2. Choose whether to include audio
+3. Select the tab to record
+4. Click "Stop Recording" when finished
+5. Choose where to save the recording
 
-## 开发技术
+## Development
 
-- 使用 Vue 3 和 Vite 构建
-- 使用 MediaRecorder API 进行录制
-- 实现 Chrome Extension Manifest V3
-- 包含 TypeScript 支持
+- Built with Vue 3 and Vite
+- Uses MediaRecorder API for capture
+- Implements Chrome Extension Manifest V3
+- TypeScript support included
 
-## 文件结构
+## Known Issues
 
-- `manifest.json`: 扩展配置文件
-- `background.js`: 后台脚本，处理录制控制
-- `content.js`: 内容脚本，处理页面交互
-- `styles.css`: 样式文件，定义录制状态UI
+- Audio capture may require additional permissions on some systems
+- Recording Chrome internal pages is not supported
+- Large files may take longer to process
 
-## 已知问题
+## License
 
-- 某些系统可能需要额外的音频录制权限
-- 不支持在 Chrome 内部页面（chrome:// 开头的页面）上录制
-- 大文件处理可能需要较长时间
-- 首次使用时需要授予录制权限
-- 建议在录制前关闭不需要的标签页
-
-## 更新日志
-
-### Version 1.1.0 (2024-03-20)
-- 添加音频录制支持
-- 优化性能和文件处理
-- 改进用户界面
-- 增加错误处理和日志
-
-### Version 1.0.0 (2024-03-19)
-- 初始版本发布
-- 实现基本录制功能
-- 添加快捷键支持
-- 优化UI交互
-
-## 许可证
-
-MIT License
-
-## 作者
-
-[Fenrir]    
-
-## 最后更新时间
-
-${currentDate} ${currentTime}
+MIT
