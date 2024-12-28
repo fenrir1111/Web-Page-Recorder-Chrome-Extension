@@ -10,7 +10,10 @@
     "downloads",
     "scripting",
     "tabCapture",
-    "windows"
+    "windows",
+    "storage",
+    "commands",
+    "audioCapture"
   ],
   "host_permissions": [
     "<all_urls>",
@@ -32,14 +35,16 @@
     "matches": ["<all_urls>", "http://*/*", "https://*/*"],
     "js": ["content.js"],
     "css": ["styles.css"],
-    "run_at": "document_start",
+    "run_at": "document_end",
     "all_frames": true
   }],
   "commands": {
     "start-recording": {
       "suggested_key": {
         "default": "Alt+Shift+X",
-        "mac": "Alt+Shift+X"
+        "mac": "Alt+Shift+X",
+        "windows": "Alt+Shift+X",
+        "linux": "Alt+Shift+X"
       },
       "description": "Start recording"
     }
@@ -47,5 +52,9 @@
   "web_accessible_resources": [{
     "resources": ["content.js"],
     "matches": ["<all_urls>"]
-  }]
+  }],
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": false
+  }
 } 

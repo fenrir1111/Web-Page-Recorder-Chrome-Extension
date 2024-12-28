@@ -4,7 +4,7 @@ console.log('Background script loaded - ' + new Date().toISOString());
 // 监听快捷键命令
 chrome.commands.onCommand.addListener((command) => {
   console.log('Command received:', command);
-  if (command === "start-recording") {
+  if (command === "start-recording" || command === "_execute_action") {
     startRecordingProcess();
   }
 });
@@ -13,6 +13,17 @@ chrome.commands.onCommand.addListener((command) => {
 chrome.action.onClicked.addListener(() => {
   console.log('Extension icon clicked');
   startRecordingProcess();
+});
+
+// 监听键盘事件
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.action === "keyPress") {
+    // 检查是否匹配快捷键
+    if (message.altKey && message.shiftKey && message.key.toLowerCase() === 'x') {
+      startRecordingProcess();
+    }
+  }
+  // ... 其他消息处理 ...
 });
 
 // 处理录制启动流程
@@ -37,7 +48,7 @@ async function startRecordingProcess() {
       return;
     }
 
-    // 检查是否是受限页面（Chrome内部页面等）
+    // 检查是否是受限页面
     if (tab.url.startsWith('chrome://') || 
         tab.url.startsWith('edge://') || 
         tab.url.startsWith('about:') ||
@@ -46,39 +57,42 @@ async function startRecordingProcess() {
       return;
     }
 
-    // 注入内容脚本
     try {
-      await chrome.scripting.executeScript({
-        target: {tabId: tab.id},
-        files: ['content.js']
-      });
-      console.log('Content script injected');
-    } catch (e) {
-      console.log('Content script already exists or injection failed:', e);
-    }
-
-    // 请求屏幕捕获权限
-    const pending = chrome.desktopCapture.chooseDesktopMedia(
-      ["screen", "window", "tab"],
-      tab,
-      (streamId) => {
-        if (!streamId) {
-          console.error('No stream ID received');
-          return;
+      // 请求标签页捕获
+      const pending = chrome.desktopCapture.chooseDesktopMedia(
+        ["tab", "audio"], // 添加音频捕获
+        tab,
+        (streamId) => {
+          if (!streamId) {
+            console.error('No stream ID received');
+            return;
+          }
+          chrome.tabs.sendMessage(tab.id, {
+            action: "startRecording",
+            streamId: streamId
+          }).catch(error => {
+            if (error.message.includes('Could not establish connection')) {
+              chrome.scripting.executeScript({
+                target: {tabId: tab.id},
+                files: ['content.js']
+              }).then(() => {
+                chrome.tabs.sendMessage(tab.id, {
+                  action: "startRecording",
+                  streamId: streamId
+                });
+              });
+            } else {
+              console.error('Error sending message to content script:', error);
+            }
+          });
         }
-        // 将streamId发送给content script开始录制
-        chrome.tabs.sendMessage(tab.id, {
-          action: "startRecording",
-          streamId: streamId
-        }).catch(error => {
-          console.error('Error sending message to content script:', error);
-        });
-      }
-    );
+      );
 
-    // 检查是否成功启动捕获选择
-    if (!pending) {
-      console.error('Failed to start desktop capture');
+      if (!pending) {
+        console.error('Failed to start desktop capture');
+      }
+    } catch (error) {
+      console.error('Error in capture process:', error);
     }
 
   } catch (error) {
@@ -89,18 +103,56 @@ async function startRecordingProcess() {
 // 监听来自content script的消息
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   console.log('Message received in background:', message);
+  
+  // 处理录制请求
+  if (message.action === "startRecording") {
+    startRecordingProcess();
+    return;
+  }
+
+  // 处理下载请求
   if (message.action === "downloadRecording") {
-    // 生成不包含非法字符的文件名
     const timestamp = new Date().toISOString()
-      .replace(/:/g, '-')     // 替换冒号为横杠
-      .replace(/\./g, '-')    // 替换点号为横杠
-      .replace(/[T]/g, '_');  // 替换T为下划线
+      .replace(/:/g, '-')
+      .replace(/\./g, '-')
+      .replace(/[T]/g, '_');
     
-    // 触发下载
     chrome.downloads.download({
       url: message.url,
       filename: `recording_${timestamp}.webm`,
       saveAs: true
     });
+    return;
   }
+
+  // 处理快捷键更新
+  if (message.action === 'updateShortcut') {
+    chrome.storage.sync.set({ recordingShortcut: message.shortcut }, () => {
+      chrome.runtime.sendMessage({
+        action: 'shortcutUpdated'
+      });
+    });
+    return;
+  }
+});
+
+// 添加快捷键冲突检测
+chrome.runtime.onInstalled.addListener(() => {
+  // 设置默认快捷键
+  chrome.storage.sync.get(['recordingShortcut'], (result) => {
+    if (!result.recordingShortcut) {
+      chrome.storage.sync.set({
+        recordingShortcut: 'Alt+Shift+X'
+      });
+    }
+  });
+
+  // 检查快捷键冲突
+  chrome.commands.getAll((commands) => {
+    commands.forEach(command => {
+      if (command.shortcut) {
+        console.log(`Registered command: ${command.name} with shortcut: ${command.shortcut}`);
+      }
+    });
+  });
 }); 

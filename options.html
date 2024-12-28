@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>网页录制器设置</title>
+  <style>
+    body {
+      padding: 20px;
+      font-family: "Microsoft YaHei", Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .shortcut-container {
+      margin-bottom: 20px;
+      background: #f5f5f5;
+      padding: 15px;
+      border-radius: 5px;
+    }
+    .shortcut-container label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+    .shortcut-container input {
+      width: 200px;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    .conflict-warning {
+      color: #d43f3a;
+      display: none;
+      margin-top: 8px;
+      padding: 8px;
+      background: #ffebee;
+      border-radius: 4px;
+    }
+    .instructions {
+      margin-top: 20px;
+      padding: 15px;
+      background: #e8f5e9;
+      border-radius: 4px;
+    }
+    .instructions h3 {
+      margin-top: 0;
+      color: #2e7d32;
+    }
+    button {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    button:hover {
+      background: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <h2>网页录制器设置</h2>
+  
+  <div class="shortcut-container">
+    <label>录制快捷键:</label>
+    <input type="text" id="recordingShortcut" placeholder="点击并按下新快捷键" readonly>
+    <div id="conflictWarning" class="conflict-warning">
+      警告：此快捷键可能与其他扩展或浏览器快捷键冲突
+    </div>
+  </div>
+
+  <div class="instructions">
+    <h3>使用说明：</h3>
+    <ul>
+      <li>默认快捷键为 Alt+Shift+X</li>
+      <li>点击输入框并按下新的快捷键组合来更改</li>
+      <li>支持的组合键：
+        <ul>
+          <li>Ctrl / Alt / Shift / Command（Mac）</li>
+          <li>字母键（A-Z）</li>
+          <li>数字键（0-9）</li>
+        </ul>
+      </li>
+      <li>建议避免使用浏览器常用快捷键（如 Ctrl+C、Ctrl+V 等）</li>
+    </ul>
+  </div>
+
+  <button id="save">保存设置</button>
+  <script src="options.js"></script>
+</body>
+</html> 
