@@ -1,26 +1,3 @@
-<template>
-  <div class="recording-status" :class="{ hidden: isHidden }">
-    <span>正在录制</span>
-    <button @click="stopRecording">停止</button>
-    <button class="toggle-visibility" 
-            @click="toggleVisibility" 
-            title="显示/隐藏">👁</button>
-  </div>
-</template>
-
-<script setup>
-import { ref } from 'vue'
-import { useRecorder } from '../composables/useRecorder'
-
-const isHidden = ref(true)
-const { stopRecording } = useRecorder()
-
-const toggleVisibility = () => {
-  isHidden.value = !isHidden.value
-}
-</script>
-
-<style scoped>
 .recording-status {
   position: fixed;
   top: 0;
@@ -38,7 +15,7 @@ const toggleVisibility = () => {
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-.hidden {
+.recording-status.hidden {
   opacity: 0;
   transform: translateY(-100%);
   pointer-events: none;
@@ -66,5 +43,4 @@ button {
 
 .toggle-visibility:hover {
   opacity: 1;
-}
-</style> 
+} 

@@ -13,30 +13,35 @@
     "windows",
     "storage",
     "commands",
-    "audioCapture"
+    "notifications",
+    "webRequest"
   ],
   "host_permissions": [
     "<all_urls>",
     "http://*/*",
     "https://*/*"
   ],
+  "icons": {
+    "16": "images/icon16.png",
+    "48": "images/icon48.png",
+    "128": "images/icon128.png"
+  },
   "action": {
     "default_icon": {
       "16": "images/icon16.png",
       "48": "images/icon48.png",
       "128": "images/icon128.png"
     },
-    "default_title": "Start Recording"
+    "default_popup": "popup/index.html"
   },
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background/background.js",
+    "type": "module"
   },
   "content_scripts": [{
     "matches": ["<all_urls>", "http://*/*", "https://*/*"],
-    "js": ["content.js"],
-    "css": ["styles.css"],
-    "run_at": "document_end",
-    "all_frames": true
+    "js": ["content/content.js"],
+    "css": ["css/style.css"]
   }],
   "commands": {
     "start-recording": {
@@ -49,12 +54,16 @@
       "description": "Start recording"
     }
   },
+  "options_page": "options/index.html",
   "web_accessible_resources": [{
-    "resources": ["content.js"],
+    "resources": [
+      "content/content.js",
+      "assets/*",
+      "css/*"
+    ],
     "matches": ["<all_urls>"]
   }],
-  "options_ui": {
-    "page": "options.html",
-    "open_in_tab": false
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
   }
 } 
