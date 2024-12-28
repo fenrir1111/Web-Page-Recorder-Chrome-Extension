@@ -73,21 +73,18 @@ async function build() {
     // 复制 CSS 文件
     const cssDir = path.join(distDir, 'css')
     if (await fs.pathExists(cssDir)) {
-      const cssFiles = await fs.readdir(cssDir)
-      for (const cssFile of cssFiles) {
-        // 复制到 popup 目录
-        await fs.copy(
-          path.join(cssDir, cssFile),
-          path.join(distDir, 'popup', cssFile),
-          { overwrite: true }
-        )
-        // 复制到 options 目录
-        await fs.copy(
-          path.join(cssDir, cssFile),
-          path.join(distDir, 'options', cssFile),
-          { overwrite: true }
-        )
-      }
+      // 复制到 options 目录
+      await fs.copy(
+        path.join(cssDir, 'styles.css'),
+        path.join(distDir, 'options', 'styles.css'),
+        { overwrite: true }
+      )
+      // 复制到 popup 目录
+      await fs.copy(
+        path.join(cssDir, 'styles.css'),
+        path.join(distDir, 'popup', 'styles.css'),
+        { overwrite: true }
+      )
     }
 
     // 等待一秒确保文件写入完成
