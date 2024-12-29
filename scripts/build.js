@@ -60,29 +60,26 @@ async function build() {
       }
     }
 
-    // 复制 content styles
-    const stylePath = path.join(rootDir, 'src/content/style.css')
-    if (await fs.pathExists(stylePath)) {
-      await fs.copy(
-        stylePath,
-        path.join(distDir, 'css/style.css'),
-        { overwrite: true }
-      )
+    // 处理 CSS 文件
+    const builtCssPath = path.join(distDir, 'css/styles.css')
+    if (await fs.pathExists(builtCssPath)) {
+      // 复制到 popup 和 options 目录
+      const targets = ['popup', 'options']
+      for (const target of targets) {
+        await fs.copy(
+          builtCssPath,
+          path.join(distDir, target, 'styles.css'),
+          { overwrite: true }
+        )
+      }
     }
 
-    // 复制 CSS 文件
-    const cssDir = path.join(distDir, 'css')
-    if (await fs.pathExists(cssDir)) {
-      // 复制到 options 目录
+    // 复制 content styles（如果存在）
+    const contentStylePath = path.join(rootDir, 'src/content/style.css')
+    if (await fs.pathExists(contentStylePath)) {
       await fs.copy(
-        path.join(cssDir, 'styles.css'),
-        path.join(distDir, 'options', 'styles.css'),
-        { overwrite: true }
-      )
-      // 复制到 popup 目录
-      await fs.copy(
-        path.join(cssDir, 'styles.css'),
-        path.join(distDir, 'popup', 'styles.css'),
+        contentStylePath,
+        path.join(distDir, 'css/content.css'),
         { overwrite: true }
       )
     }
@@ -92,12 +89,16 @@ async function build() {
 
     // 检查必要文件
     const requiredFiles = [
+      'manifest.json',
       'popup/index.html',
       'popup/index.js',
+      'popup/styles.css',
       'options/index.html',
       'options/index.js',
+      'options/styles.css',
       'background/background.js',
-      'content/content.js'
+      'content/content.js',
+      'css/styles.css'
     ]
 
     let missingFiles = false
