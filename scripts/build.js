@@ -60,12 +60,26 @@ async function build() {
       }
     }
 
-    // 复制 content styles
-    const stylePath = path.join(rootDir, 'src/content/style.css')
-    if (await fs.pathExists(stylePath)) {
+    // 处理 CSS 文件
+    const builtCssPath = path.join(distDir, 'css/styles.css')
+    if (await fs.pathExists(builtCssPath)) {
+      // 复制到 popup 和 options 目录
+      const targets = ['popup', 'options']
+      for (const target of targets) {
+        await fs.copy(
+          builtCssPath,
+          path.join(distDir, target, 'styles.css'),
+          { overwrite: true }
+        )
+      }
+    }
+
+    // 复制 content styles（如果存在）
+    const contentStylePath = path.join(rootDir, 'src/content/style.css')
+    if (await fs.pathExists(contentStylePath)) {
       await fs.copy(
-        stylePath,
-        path.join(distDir, 'css/style.css'),
+        contentStylePath,
+        path.join(distDir, 'css/content.css'),
         { overwrite: true }
       )
     }
@@ -75,12 +89,16 @@ async function build() {
 
     // 检查必要文件
     const requiredFiles = [
+      'manifest.json',
       'popup/index.html',
       'popup/index.js',
+      'popup/styles.css',
       'options/index.html',
       'options/index.js',
+      'options/styles.css',
       'background/background.js',
-      'content/content.js'
+      'content/content.js',
+      'css/styles.css'
     ]
 
     let missingFiles = false

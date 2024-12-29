@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 自定义样式 */
+@layer base {
+  body {
+    @apply antialiased;
+  }
+}
+
+/* 过渡动画 */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/* 开关样式 */
+.toggle-switch {
+  @apply relative inline-flex h-6 w-11 items-center rounded-full;
+}
+
+.toggle-switch input:checked ~ span {
+  @apply bg-blue-600;
+}
+
+.toggle-switch span {
+  @apply absolute inset-0 transition-colors duration-200 ease-in-out;
+}
+
+.toggle-switch span:before {
+  @apply absolute left-0 inline-block h-5 w-5 transform rounded-full bg-white transition-transform duration-200 ease-in-out;
+  content: "";
+}
+
+.toggle-switch input:checked ~ span:before {
+  @apply translate-x-5;
+} 

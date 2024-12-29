@@ -29,10 +29,10 @@ export default defineConfig({
         format: 'es',
         dir: 'dist',
         entryFileNames: '[name].js',
-        chunkFileNames: 'assets/[name].[hash].js',
+        chunkFileNames: 'assets/[name].js',
         assetFileNames: (assetInfo) => {
           if (assetInfo.name.endsWith('.css')) {
-            return 'css/[name].[ext]'
+            return 'css/styles.css'
           }
           return 'assets/[name].[ext]'
         }
