@@ -1,9 +1,11 @@
 import { ref } from 'vue'
+import { useRecordingStore } from '../../stores/recording'
 
 export function useRecorder() {
   const mediaRecorder = ref(null)
   const recordedChunks = ref([])
   const mediaStream = ref(null)
+  const store = useRecordingStore()
 
   const startRecording = async (streamId) => {
     try {
@@ -52,6 +54,7 @@ export function useRecorder() {
           mediaStream.value.getTracks().forEach(track => track.stop())
           mediaStream.value = null
         }
+        store.stopRecording()
       }
 
       mediaRecorder.value.start(1000)
@@ -70,6 +73,6 @@ export function useRecorder() {
   return {
     startRecording,
     stopRecording,
-    isRecording: () => mediaRecorder.value?.state === 'recording'
+    isRecording: () => store.isRecording
   }
 } 

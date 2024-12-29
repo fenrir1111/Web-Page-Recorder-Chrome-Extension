@@ -1,5 +1,5 @@
 <template>
-  <div class="recording-status" :class="{ hidden: isHidden }">
+  <div class="recording-status" :class="{ hidden: !isRecording || isHidden }">
     <span>正在录制</span>
     <button @click="stopRecording">停止</button>
     <button class="toggle-visibility" 
@@ -11,8 +11,12 @@
 <script setup>
 import { ref } from 'vue'
 import { useRecorder } from '../composables/useRecorder'
+import { useRecordingStore } from '../../stores/recording'
+import { storeToRefs } from 'pinia'
 
-const isHidden = ref(true)
+const store = useRecordingStore()
+const { isRecording } = storeToRefs(store)
+const isHidden = ref(false)
 const { stopRecording } = useRecorder()
 
 const toggleVisibility = () => {
